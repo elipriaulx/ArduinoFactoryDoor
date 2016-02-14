@@ -1,15 +1,16 @@
-#include "Types.h"
+#include <arduino.h>
+#include "RollerDoorTypes.h"
 
 #define MAX_TRAVEL_TIME 25000
 
 // State Management
 enum OperationalStates
 {
-  Unknown,
-  DoorUp,
-  DoorDown,
-  DoorRaising,
-  DoorLowering
+	Unknown,
+	DoorUp,
+	DoorDown,
+	DoorRaising,
+	DoorLowering
 };
 
 OperationalStates doorState = Unknown;
@@ -29,125 +30,125 @@ Output actionEnable = { 10, false, HIGH };
 Output indicator = { 13, false, HIGH };
 
 // Timer
-unsigned long previousTime = 0; 
-unsigned long currentTime = 0; 
-unsigned long intervalTime = 0; 
+unsigned long previousTime = 0;
+unsigned long currentTime = 0;
+unsigned long intervalTime = 0;
 unsigned long travelTime = 0;
 
 void setup() {
-  InitialiseInput(&buttonUp);
-  InitialiseInput(&buttonDown);
-  InitialiseInput(&buttonStop);
-  InitialiseInput(&buttonRemote);
-  InitialiseInput(&safetyBreakBeam);
-  InitialiseInput(&closedReedSwitch);
+	InitialiseInput(&buttonUp);
+	InitialiseInput(&buttonDown);
+	InitialiseInput(&buttonStop);
+	InitialiseInput(&buttonRemote);
+	InitialiseInput(&safetyBreakBeam);
+	InitialiseInput(&closedReedSwitch);
 
-  InitialiseOutput(&actionUp);
-  InitialiseOutput(&actionDown);
-  InitialiseOutput(&actionEnable);
-  InitialiseOutput(&indicator);
+	InitialiseOutput(&actionUp);
+	InitialiseOutput(&actionDown);
+	InitialiseOutput(&actionEnable);
+	InitialiseOutput(&indicator);
 }
 
 void Update()
 {
-  // Timer
-  previousTime = currentTime;
-  currentTime = millis();
-  intervalTime = currentTime - previousTime;
+	// Timer
+	previousTime = currentTime;
+	currentTime = millis();
+	intervalTime = currentTime - previousTime;
 
-  // Inputs
-  UpdateInput(&buttonUp, &intervalTime);
-  UpdateInput(&buttonDown, &intervalTime);
-  UpdateInput(&buttonStop, &intervalTime);
-  UpdateInput(&buttonRemote, &intervalTime);
-  UpdateInput(&safetyBreakBeam, &intervalTime);
-  UpdateInput(&closedReedSwitch, &intervalTime);
-  
-  // Outputs
-  UpdateOutput(&actionUp);
-  UpdateOutput(&actionEnable);
-  UpdateOutput(&actionDown);
-  UpdateOutput(&indicator);
+	// Inputs
+	UpdateInput(&buttonUp, &intervalTime);
+	UpdateInput(&buttonDown, &intervalTime);
+	UpdateInput(&buttonStop, &intervalTime);
+	UpdateInput(&buttonRemote, &intervalTime);
+	UpdateInput(&safetyBreakBeam, &intervalTime);
+	UpdateInput(&closedReedSwitch, &intervalTime);
+
+	// Outputs
+	UpdateOutput(&actionUp);
+	UpdateOutput(&actionEnable);
+	UpdateOutput(&actionDown);
+	UpdateOutput(&indicator);
 }
 
 void loop() {
-  
-  // Refrsh timer, and IO
-  Update();
 
-  switch (doorState)
-  {
-    case DoorUp:
-      
-      travelTime = 0;
-      
-      // Stop the machines!
-      SetOutput(&actionUp, false); // Don't go up.
-      SetOutput(&actionDown, false); // Don't go down.
-      SetOutput(&actionEnable, false); // Stop everything
-      SetOutput(&indicator, false); // Indicator off.
+	// Refresh timer, and IO
+	Update();
 
-      // Door is in some arbitrary position that isn't down. If remote, or down is pressed, go down if beam ok. 
-      if ((ButtonPressed(&buttonRemote) || ButtonPressed(&buttonDown)) && InputInactive(&safetyBreakBeam)) doorState = DoorLowering;
-      if (ButtonPressed(&buttonUp)) doorState = DoorRaising;
+	switch (doorState)
+	{
+	case DoorUp:
 
-      if (InputActive(&closedReedSwitch)) doorState = DoorDown;
-      
-      break;
+		travelTime = 0;
 
-    case DoorDown:
-      
-      travelTime = 0;
-      
-      // Stop the machines!
-      SetOutput(&actionUp, false); // Don't go up.
-      SetOutput(&actionDown, false); // Don't go down.
-      SetOutput(&actionEnable, false); // Stop everything.
-      SetOutput(&indicator, false); // Indicator off.
+		// Stop the machines!
+		SetOutput(&actionUp, false); // Don't go up.
+		SetOutput(&actionDown, false); // Don't go down.
+		SetOutput(&actionEnable, false); // Stop everything
+		SetOutput(&indicator, false); // Indicator off.
 
-      // Check Remote & Up Button, but ignore if stop button is being held in
-      if ((ButtonPressed(&buttonRemote) || ButtonPressed(&buttonUp)) && InputInactive(&buttonStop)) doorState = DoorRaising;
-      
-      break;
+									  // Door is in some arbitrary position that isn't down. If remote, or down is pressed, go down if beam ok. 
+		if ((ButtonPressed(&buttonRemote) || ButtonPressed(&buttonDown)) && InputInactive(&safetyBreakBeam)) doorState = DoorLowering;
+		if (ButtonPressed(&buttonUp)) doorState = DoorRaising;
 
-    case DoorRaising:
+		if (InputActive(&closedReedSwitch)) doorState = DoorDown;
 
-      travelTime += intervalTime;
-      
-      // Configure switcherisers!
-      SetOutput(&actionUp, true); // Go up.
-      SetOutput(&actionDown, false); // Don't go down.
-      SetOutput(&actionEnable, true); // Don't stop.
-      SetOutput(&indicator, true); // Indicator On.
+		break;
 
-      // Check for another button press to stop operation.
-      if (ButtonPressed(&buttonDown) || ButtonPressed(&buttonStop) || ButtonPressed(&buttonRemote)) doorState = DoorUp;
+	case DoorDown:
 
-      if (travelTime >= MAX_TRAVEL_TIME) doorState = DoorUp;
-      
-      break;
+		travelTime = 0;
 
-    case DoorLowering:
-    
-      travelTime += intervalTime;
-      
-      // Configure switcherisers!
-      SetOutput(&actionUp, false); // Don't go up.
-      SetOutput(&actionDown, true); // Go down.
-      SetOutput(&actionEnable, true); // Don't stop.
-      SetOutput(&indicator, false); // Indicator off.
+		// Stop the machines!
+		SetOutput(&actionUp, false); // Don't go up.
+		SetOutput(&actionDown, false); // Don't go down.
+		SetOutput(&actionEnable, false); // Stop everything.
+		SetOutput(&indicator, false); // Indicator off.
 
-      // Check Remote & Up Button, but ignore if stop button is being held in, and check beam
-      if ((ButtonPressed(&buttonRemote) || ButtonPressed(&buttonUp) || ButtonPressed(&buttonStop)) || InputActive(&safetyBreakBeam)) doorState = DoorUp;
-      
-      if (travelTime >= MAX_TRAVEL_TIME) doorState = DoorDown;
-      
-      break;
+									  // Check Remote & Up Button, but ignore if stop button is being held in
+		if ((ButtonPressed(&buttonRemote) || ButtonPressed(&buttonUp)) && InputInactive(&buttonStop)) doorState = DoorRaising;
 
-    default:
-        // Unknown location, determine... Must be UP (or half way) because otherwise the reed switch would have put us in a down state automagically!
-        doorState = DoorUp;
-        
-      break;
-  }  
+		break;
+
+	case DoorRaising:
+
+		travelTime += intervalTime;
+
+		// Configure switcherisers!
+		SetOutput(&actionUp, true); // Go up.
+		SetOutput(&actionDown, false); // Don't go down.
+		SetOutput(&actionEnable, true); // Don't stop.
+		SetOutput(&indicator, true); // Indicator On.
+
+									 // Check for another button press to stop operation.
+		if (ButtonPressed(&buttonDown) || ButtonPressed(&buttonStop) || ButtonPressed(&buttonRemote)) doorState = DoorUp;
+
+		if (travelTime >= MAX_TRAVEL_TIME) doorState = DoorUp;
+
+		break;
+
+	case DoorLowering:
+
+		travelTime += intervalTime;
+
+		// Configure switcherisers!
+		SetOutput(&actionUp, false); // Don't go up.
+		SetOutput(&actionDown, true); // Go down.
+		SetOutput(&actionEnable, true); // Don't stop.
+		SetOutput(&indicator, false); // Indicator off.
+
+									  // Check Remote & Up Button, but ignore if stop button is being held in, and check beam
+		if ((ButtonPressed(&buttonRemote) || ButtonPressed(&buttonUp) || ButtonPressed(&buttonStop)) || InputActive(&safetyBreakBeam)) doorState = DoorUp;
+
+		if (travelTime >= MAX_TRAVEL_TIME) doorState = DoorDown;
+
+		break;
+
+	default:
+		// Unknown location, determine... Must be UP (or half way) because otherwise the reed switch would have put us in a down state automagically!
+		doorState = DoorUp;
+
+		break;
+	}
 }

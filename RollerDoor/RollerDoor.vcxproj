@@ -22,6 +22,7 @@
     <ProjectGuid>{DA323C88-7FFB-4BEF-993D-60E4254F8FFA}</ProjectGuid>
     <RootNamespace>ArduinoFactoryDoor</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>RollerDoor</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -74,8 +75,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\yun;C:\Users\gpriaulx\Documents\Arduino\ArduinoFactoryDoor;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\vncbw3c2.ccx\Micro Platforms\default\debuggers;C:\Users\gpriaulx\Documents\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\tools\avr/avr/include/;C:\Program Files (x86)\Arduino\hardware\tools\avr//avr/include/avr/;C:\Program Files (x86)\Arduino\hardware\tools\avr/lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ForcedIncludeFiles>C:\Users\gpriaulx\Documents\Arduino\ArduinoFactoryDoor\__vm\.ArduinoFactoryDoor.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\yun;C:\Profile\Repositories\GitHub\ArduinoFactoryDoor\ArduinoFactoryDoor;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\vncbw3c2.ccx\Micro Platforms\default\debuggers;C:\Users\gpriaulx\Documents\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\tools\avr/avr/include/;C:\Program Files (x86)\Arduino\hardware\tools\avr//avr/include/avr/;C:\Program Files (x86)\Arduino\hardware\tools\avr/lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>C:\Profile\Repositories\GitHub\ArduinoFactoryDoor\ArduinoFactoryDoor\__vm\.ArduinoFactoryDoor.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <PreprocessorDefinitions>__AVR_ATmega32u4__;__AVR_ATmega32U4__;F_CPU=16000000L;ARDUINO=10607;ARDUINO_AVR_YUN;ARDUINO_ARCH_AVR;USB_VID=0x2341;USB_PID=0x8041;__cplusplus=201103L;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -113,12 +114,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="ArduinoFactoryDoor.ino">
+    <None Include="RollerDoor.ino">
       <FileType>CppCode</FileType>
     </None>
+    <None Include="inputFunctions.ino" />
+    <None Include="outputFunctions.ino" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="__vm\.ArduinoFactoryDoor.vsarduino.h" />
+    <ClInclude Include="RollerDoorTypes.h" />
+    <ClInclude Include="__vm\.RollerDoor.vsarduino.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
