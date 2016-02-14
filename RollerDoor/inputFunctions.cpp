@@ -1,9 +1,5 @@
-#define DEBOUNCE_TIME 250
-#define MAX_THRESHOLD 500
-#define MIN_THRESHOLD 1
-
+#include "inputFunctions.h"
 #include <arduino.h>
-#include "RollerDoorTypes.h"
 
 void UpdateInput(Input * input, unsigned long * interval)
 {

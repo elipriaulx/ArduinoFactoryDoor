@@ -117,12 +117,14 @@
     <None Include="RollerDoor.ino">
       <FileType>CppCode</FileType>
     </None>
-    <None Include="inputFunctions.ino" />
+    <None Include="inputFunctions.cpp" />
     <None Include="outputFunctions.ino" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Types.h" />
-    <ClInclude Include="__vm\.ArduinoFactoryDoor.vsarduino.h" />
+    <ClInclude Include="inputFunctions.h" />
+    <ClInclude Include="outputFunctions.h" />
+    <ClInclude Include="RollerDoorTypes.h" />
+    <ClInclude Include="__vm\.RollerDoor.vsarduino.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

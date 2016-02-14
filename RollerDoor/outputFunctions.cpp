@@ -1,9 +1,5 @@
-#define DEBOUNCE_TIME 250
-#define MAX_THRESHOLD 500
-#define MIN_THRESHOLD 1
-
+#include "outputFunctions.h"
 #include <arduino.h>
-#include "RollerDoorTypes.h"
 
 void UpdateOutput(Output * output)
 {

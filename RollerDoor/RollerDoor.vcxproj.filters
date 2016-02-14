@@ -15,21 +15,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="inputFunctions.ino">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="outputFunctions.ino">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="RollerDoor.ino">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="inputFunctions.cpp">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="outputFunctions.cpp">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RollerDoorTypes.h">
+    <ClInclude Include="__vm\.RollerDoor.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="__vm\.RollerDoor.vsarduino.h">
+    <ClInclude Include="inputFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="outputFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rollerDoorTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,5 +1,7 @@
 #include <arduino.h>
-#include "RollerDoorTypes.h"
+#include "rollerDoorTypes.h"
+#include "inputFunctions.h"
+#include "outputFunctions.h"
 
 #define MAX_TRAVEL_TIME 25000
 
